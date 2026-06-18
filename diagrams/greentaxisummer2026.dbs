@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="greentaxisummer2026" database="LogicalDesign" id="5f3442cb-7e63-4f6f-8107-2bb27a8dfc20" >
+	<schema name="lgl" >
+		<table name="dim_calendar" prior="dim_calenda" >
+			<column name="dim_calendar_id" type="BIGINT" mandatory="y" />
+			<column name="year_number" type="INT" />
+			<column name="quarter_number" type="INT" />
+			<column name="quarter_name" type="VARCHAR" />
+			<column name="month_number" type="INT" />
+			<column name="month_name" type="VARCHAR" length="30" />
+			<column name="day_number" type="INT" />
+			<column name="day_name" type="VARCHAR" length="20" />
+			<column name="week_of_month" type="INT" />
+			<column name="week_of_year" type="INT" />
+			<column name="weekend" type="BOOLEAN" >
+				<comment><![CDATA[0 is a weekday
+1 is a weekend]]></comment>
+			</column>
+			<column name="holiday" type="BOOLEAN" >
+				<comment><![CDATA[0 means not a holiday
+1 means there is a holiday]]></comment>
+			</column>
+			<column name="season" type="VARCHAR" length="10" >
+				<comment><![CDATA[Winter  -->   December 21st 
+Spring   --> March 21st 
+Summer --> June 21st 
+Fall   ---> September 21st]]></comment>
+			</column>
+			<index name="pk_dim_calendar" unique="PRIMARY_KEY" >
+				<column name="dim_calendar_id" />
+			</index>
+		</table>
+		<table name="dim_location" prior="dim_locati" >
+			<column name="location_id" type="INT" mandatory="y" />
+			<column name="borough" type="VARCHAR" length="100" />
+			<column name="zone_name" type="VARCHAR" length="100" />
+			<column name="service_area" type="VARCHAR" length="100" />
+			<column name="centroid_latitude" type="DOUBLE" />
+			<column name="centroid_longitude" type="DOUBLE" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="dim_payment_type" prior="dim_payment_ty" >
+			<column name="payment_type_id" type="INT" mandatory="y" />
+			<column name="payment_type_name" type="VARCHAR" length="50" />
+			<index name="pk_dim_payment_type" unique="PRIMARY_KEY" >
+				<column name="payment_type_id" />
+			</index>
+		</table>
+		<table name="dim_rate_code" prior="dim_rate_c" >
+			<column name="rate_code_id" type="INT" mandatory="y" />
+			<column name="rate_code_name" type="VARCHAR" length="50" />
+			<index name="pk_dim_rate_code" unique="PRIMARY_KEY" >
+				<column name="rate_code_id" />
+			</index>
+		</table>
+		<table name="dim_trip_type" prior="dim_trip_ty" >
+			<column name="trip_type_id" type="INT" mandatory="y" />
+			<column name="trip_type_name" type="VARCHAR" length="50" />
+			<index name="pk_dim_trip_type" unique="PRIMARY_KEY" >
+				<column name="trip_type_id" />
+			</index>
+		</table>
+		<table name="dim_vendor" prior="dim_vendo" >
+			<column name="vendor_id" type="INT" mandatory="y" />
+			<column name="vendor_name" type="VARCHAR" length="50" />
+			<index name="pk_dim_vendor" unique="PRIMARY_KEY" >
+				<column name="vendor_id" />
+			</index>
+		</table>
+		<table name="fact_trip" prior="fact_t" >
+			<column name="fact_trip_id" type="BIGINT" mandatory="y" />
+			<column name="passenger_count" type="INT" />
+			<column name="trip_distance" type="DECIMAL" length="5" decimal="2" />
+			<column name="fare_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="extra" type="DECIMAL" length="10" decimal="2" />
+			<column name="mta" type="DECIMAL" length="10" decimal="2" />
+			<column name="tip_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="tolls_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="improvement_surcharge" type="DECIMAL" length="10" decimal="2" />
+			<column name="total_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="congestion_surcharge" type="DECIMAL" length="10" decimal="2" />
+			<column name="vendor_id" type="INT" mandatory="y" />
+			<column name="rate_code_id" type="INT" mandatory="y" />
+			<column name="payment_type_id" type="INT" mandatory="y" />
+			<column name="trip_type_id" type="INT" mandatory="y" />
+			<column name="pickup_location_id" type="INT" mandatory="y" />
+			<column name="dropoff_location_id" type="INT" mandatory="y" />
+			<column name="pickup_date_id" prior="picku_date_id" type="BIGINT" mandatory="y" />
+			<column name="dropoff_date_id" type="BIGINT" mandatory="y" />
+			<column name="trip_duration" type="DECIMAL" length="12" decimal="2" >
+				<comment><![CDATA[in minutes]]></comment>
+			</column>
+			<column name="temperature" type="DECIMAL" length="5" decimal="2" >
+				<comment><![CDATA[Farenheit]]></comment>
+			</column>
+			<column name="precipitation_probability" type="DECIMAL" length="5" decimal="2" />
+			<column name="rain" type="DECIMAL" length="5" decimal="2" />
+			<column name="showers" type="DECIMAL" length="5" decimal="2" />
+			<column name="snowfall" type="DECIMAL" length="5" decimal="2" />
+			<column name="snow_depth" type="DECIMAL" length="5" decimal="2" />
+			<column name="wind_120m" type="DECIMAL" length="5" decimal="2" />
+			<column name="wind_180m" type="DECIMAL" length="5" decimal="2" />
+			<index name="pk_fact_trip" unique="PRIMARY_KEY" >
+				<column name="fact_trip_id" />
+			</index>
+			<fk name="fk_fact_trip_dim_vendor" to_schema="lgl" to_table="dim_vendor" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="vendor_id" pk="vendor_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_rate_code" to_schema="lgl" to_table="dim_rate_code" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="rate_code_id" pk="rate_code_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_payment_type" to_schema="lgl" to_table="dim_payment_type" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="payment_type_id" pk="payment_type_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_trip_type" to_schema="lgl" to_table="dim_trip_type" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="trip_type_id" pk="trip_type_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_location" to_schema="lgl" to_table="dim_location" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="pickup_location_id" pk="location_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_location_0" to_schema="lgl" to_table="dim_location" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="dropoff_location_id" pk="location_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_calendar" to_schema="lgl" to_table="dim_calendar" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="pickup_date_id" pk="dim_calendar_id" />
+			</fk>
+			<fk name="fk_fact_trip_dim_calendar_0" to_schema="lgl" to_table="dim_calendar" type="NonIdentifying" mandatory="y" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="dropoff_date_id" pk="dim_calendar_id" />
+			</fk>
+		</table>
+	</schema>
+	<diagram_group name="Default" id="cb72518a-a66b-478b-b6bb-55bf996f12e3" >
+		<diagram name="Default Diagram" id="e731f4ca-68b0-4469-a866-c7d0559a7188" show_relation="columns" >
+			<entity schema="lgl" name="dim_calendar" color="C1D8EE" x="760" y="570" />
+			<entity schema="lgl" name="dim_location" color="C1D8EE" x="76" y="399" />
+			<entity schema="lgl" name="dim_payment_type" color="C1D8EE" x="722" y="380" />
+			<entity schema="lgl" name="dim_rate_code" color="C1D8EE" x="722" y="171" />
+			<entity schema="lgl" name="dim_trip_type" color="C1D8EE" x="95" y="627" />
+			<entity schema="lgl" name="dim_vendor" color="C1D8EE" x="57" y="171" />
+			<entity schema="lgl" name="fact_trip" color="C1D8EE" x="380" y="285" />
+			<callout x="95" y="57" pointer="Round" >
+				<comment><![CDATA[- Create new entities by right-clicking the diagram. 
+- Double-click entity headers to edit.
+- Get a better understanding of the schema by creating multiple diagrams.
+- Convert the logical design to physical design and deploy it into the database.]]></comment>
+			</callout>
+		</diagram>
+	</diagram_group>
+</project>
