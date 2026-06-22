@@ -5,6 +5,8 @@ Provide a brief description of the problem you're addressing. Include any backgr
 
 *Problem description goes here.*
 
+The Green Taxi data dictionary includes operational and financial fields such as pickup/dropoff timestamps, pickup and dropoff Taxi Zone IDs, trip distance, fare, total amount, payment type, trip type, congestion surcharge, and the new cbd_congestion_fee field for the MTA Congestion Relief Zone beginning January 5, 20.
+
 ## B. Requirements
 
 ### 1. Requirements Analysis
