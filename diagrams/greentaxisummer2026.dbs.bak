@@ -133,13 +133,13 @@ Fall   ---> September 21st]]></comment>
 	</schema>
 	<diagram_group name="Default" id="cb72518a-a66b-478b-b6bb-55bf996f12e3" >
 		<diagram name="Default Diagram" id="e731f4ca-68b0-4469-a866-c7d0559a7188" show_relation="columns" >
-			<entity schema="lgl" name="dim_calendar" color="C1D8EE" x="779" y="570" />
+			<entity schema="lgl" name="dim_calendar" color="C1D8EE" x="760" y="570" />
 			<entity schema="lgl" name="dim_location" color="C1D8EE" x="76" y="399" />
 			<entity schema="lgl" name="dim_payment_type" color="C1D8EE" x="722" y="380" />
 			<entity schema="lgl" name="dim_rate_code" color="C1D8EE" x="722" y="171" />
 			<entity schema="lgl" name="dim_trip_type" color="C1D8EE" x="95" y="627" />
 			<entity schema="lgl" name="dim_vendor" color="C1D8EE" x="57" y="171" />
-			<entity schema="lgl" name="fact_trip" color="C1D8EE" x="399" y="247" />
+			<entity schema="lgl" name="fact_trip" color="C1D8EE" x="380" y="285" />
 			<callout x="95" y="57" pointer="Round" >
 				<comment><![CDATA[- Create new entities by right-clicking the diagram. 
 - Double-click entity headers to edit.

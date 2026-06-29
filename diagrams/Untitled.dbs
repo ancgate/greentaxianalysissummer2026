@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="greentaxisummer2026" database="Snowflake" id="f0abe4a4-727f-45a6-8dfc-07074feb2641" >
+	<schema name="LGL" >
+		<table name="DIM_CALENDAR" prior="dim_calendar" >
+			<column name="DIM_CALENDAR_ID" prior="dim_calendar_id" type="BIGINT" mandatory="y" />
+			<column name="YEAR_NUMBER" prior="year_number" type="INT" />
+			<column name="QUARTER_NUMBER" prior="quarter_number" type="INT" />
+			<column name="QUARTER_NAME" prior="quarter_name" type="VARCHAR" />
+			<column name="MONTH_NUMBER" prior="month_number" type="INT" />
+			<column name="MONTH_NAME" prior="month_name" type="VARCHAR" length="30" />
+			<column name="DAY_NUMBER" prior="day_number" type="INT" />
+			<column name="DAY_NAME" prior="day_name" type="VARCHAR" length="20" />
+			<column name="WEEK_OF_MONTH" prior="week_of_month" type="INT" />
+			<column name="WEEK_OF_YEAR" prior="week_of_year" type="INT" />
+			<column name="WEEKEND" prior="weekend" type="BOOLEAN" >
+				<comment><![CDATA[0 is a weekday
+1 is a weekend]]></comment>
+			</column>
+			<column name="HOLIDAY" prior="holiday" type="BOOLEAN" >
+				<comment><![CDATA[0 means not a holiday
+1 means there is a holiday]]></comment>
+			</column>
+			<column name="SEASON" prior="season" type="VARCHAR" length="10" >
+				<comment><![CDATA[Winter  -->   December 21st 
+Spring   --> March 21st 
+Summer --> June 21st 
+Fall   ---> September 21st]]></comment>
+			</column>
+			<index name="PK_DIM_CALENDAR" unique="PRIMARY_KEY" >
+				<column name="DIM_CALENDAR_ID" />
+			</index>
+		</table>
+		<table name="DIM_LOCATION" prior="dim_location" >
+			<column name="LOCATION_ID" prior="location_id" type="INT" mandatory="y" />
+			<column name="BOROUGH" prior="borough" type="VARCHAR" length="100" />
+			<column name="ZONE_NAME" prior="zone_name" type="VARCHAR" length="100" />
+			<column name="SERVICE_AREA" prior="service_area" type="VARCHAR" length="100" />
+			<column name="CENTROID_LATITUDE" prior="centroid_latitude" type="DOUBLE" />
+			<column name="CENTROID_LONGITUDE" prior="centroid_longitude" type="DOUBLE" />
+			<index name="PK_DIM_LOCATION" unique="PRIMARY_KEY" >
+				<column name="LOCATION_ID" />
+			</index>
+		</table>
+		<table name="DIM_PAYMENT_TYPE" prior="dim_payment_type" >
+			<column name="PAYMENT_TYPE_ID" prior="payment_type_id" type="INT" mandatory="y" />
+			<column name="PAYMENT_TYPE_NAME" prior="payment_type_name" type="VARCHAR" length="50" />
+			<index name="PK_DIM_PAYMENT_TYPE" unique="PRIMARY_KEY" >
+				<column name="PAYMENT_TYPE_ID" />
+			</index>
+		</table>
+		<table name="DIM_RATE_CODE" prior="dim_rate_code" >
+			<column name="RATE_CODE_ID" prior="rate_code_id" type="INT" mandatory="y" />
+			<column name="RATE_CODE_NAME" prior="rate_code_name" type="VARCHAR" length="50" />
+			<index name="PK_DIM_RATE_CODE" unique="PRIMARY_KEY" >
+				<column name="RATE_CODE_ID" />
+			</index>
+		</table>
+		<table name="DIM_TRIP_TYPE" prior="dim_trip_type" >
+			<column name="TRIP_TYPE_ID" prior="trip_type_id" type="INT" mandatory="y" />
+			<column name="TRIP_TYPE_NAME" prior="trip_type_name" type="VARCHAR" length="50" />
+			<index name="PK_DIM_TRIP_TYPE" unique="PRIMARY_KEY" >
+				<column name="TRIP_TYPE_ID" />
+			</index>
+		</table>
+		<table name="DIM_VENDOR" prior="dim_vendor" >
+			<column name="VENDOR_ID" prior="vendor_id" type="INT" mandatory="y" />
+			<column name="VENDOR_NAME" prior="vendor_name" type="VARCHAR" length="50" />
+			<index name="PK_DIM_VENDOR" unique="PRIMARY_KEY" >
+				<column name="VENDOR_ID" />
+			</index>
+		</table>
+		<table name="FACT_TRIP" prior="fact_trip" >
+			<column name="FACT_TRIP_ID" prior="fact_trip_id" type="BIGINT" mandatory="y" />
+			<column name="PASSENGER_COUNT" prior="passenger_count" type="INT" />
+			<column name="TRIP_DISTANCE" prior="trip_distance" type="DECIMAL" length="5" decimal="2" />
+			<column name="FARE_AMOUNT" prior="fare_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="EXTRA" prior="extra" type="DECIMAL" length="10" decimal="2" />
+			<column name="MTA" prior="mta" type="DECIMAL" length="10" decimal="2" />
+			<column name="TIP_AMOUNT" prior="tip_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="TOLLS_AMOUNT" prior="tolls_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="IMPROVEMENT_SURCHARGE" prior="improvement_surcharge" type="DECIMAL" length="10" decimal="2" />
+			<column name="TOTAL_AMOUNT" prior="total_amount" type="DECIMAL" length="10" decimal="2" />
+			<column name="CONGESTION_SURCHARGE" prior="congestion_surcharge" type="DECIMAL" length="10" decimal="2" />
+			<column name="VENDOR_ID" prior="vendor_id" type="INT" mandatory="y" />
+			<column name="RATE_CODE_ID" prior="rate_code_id" type="INT" mandatory="y" />
+			<column name="PAYMENT_TYPE_ID" prior="payment_type_id" type="INT" mandatory="y" />
+			<column name="TRIP_TYPE_ID" prior="trip_type_id" type="INT" mandatory="y" />
+			<column name="PICKUP_LOCATION_ID" prior="pickup_location_id" type="INT" mandatory="y" />
+			<column name="DROPOFF_LOCATION_ID" prior="dropoff_location_id" type="INT" mandatory="y" />
+			<column name="PICKUP_DATE_ID" prior="pickup_date_id" type="BIGINT" mandatory="y" />
+			<column name="DROPOFF_DATE_ID" prior="dropoff_date_id" type="BIGINT" mandatory="y" />
+			<column name="TRIP_DURATION" prior="trip_duration" type="DECIMAL" length="12" decimal="2" >
+				<comment><![CDATA[in minutes]]></comment>
+			</column>
+			<column name="TEMPERATURE" prior="temperature" type="DECIMAL" length="5" decimal="2" >
+				<comment><![CDATA[Farenheit]]></comment>
+			</column>
+			<column name="PRECIPITATION_PROBABILITY" prior="precipitation_probability" type="DECIMAL" length="5" decimal="2" />
+			<column name="RAIN" prior="rain" type="DECIMAL" length="5" decimal="2" />
+			<column name="SHOWERS" prior="showers" type="DECIMAL" length="5" decimal="2" />
+			<column name="SNOWFALL" prior="snowfall" type="DECIMAL" length="5" decimal="2" />
+			<column name="SNOW_DEPTH" prior="snow_depth" type="DECIMAL" length="5" decimal="2" />
+			<column name="WIND_120M" prior="wind_120m" type="DECIMAL" length="5" decimal="2" />
+			<column name="WIND_180M" prior="wind_180m" type="DECIMAL" length="5" decimal="2" />
+			<index name="PK_FACT_TRIP" unique="PRIMARY_KEY" >
+				<column name="FACT_TRIP_ID" />
+			</index>
+			<fk name="FK_FACT_TRIP_DIM_VENDOR" to_schema="LGL" to_table="DIM_VENDOR" >
+				<fk_column name="VENDOR_ID" pk="VENDOR_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_RATE_CODE" to_schema="LGL" to_table="DIM_RATE_CODE" >
+				<fk_column name="RATE_CODE_ID" pk="RATE_CODE_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_PAYMENT_TYPE" to_schema="LGL" to_table="DIM_PAYMENT_TYPE" >
+				<fk_column name="PAYMENT_TYPE_ID" pk="PAYMENT_TYPE_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_TRIP_TYPE" to_schema="LGL" to_table="DIM_TRIP_TYPE" >
+				<fk_column name="TRIP_TYPE_ID" pk="TRIP_TYPE_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_LOCATION" to_schema="LGL" to_table="DIM_LOCATION" >
+				<fk_column name="PICKUP_LOCATION_ID" pk="LOCATION_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_LOCATION_0" to_schema="LGL" to_table="DIM_LOCATION" >
+				<fk_column name="DROPOFF_LOCATION_ID" pk="LOCATION_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_CALENDAR" to_schema="LGL" to_table="DIM_CALENDAR" >
+				<fk_column name="PICKUP_DATE_ID" pk="DIM_CALENDAR_ID" />
+			</fk>
+			<fk name="FK_FACT_TRIP_DIM_CALENDAR_0" to_schema="LGL" to_table="DIM_CALENDAR" >
+				<fk_column name="DROPOFF_DATE_ID" pk="DIM_CALENDAR_ID" />
+			</fk>
+		</table>
+	</schema>
+	<diagram_group name="Default" id="f7920783-d676-4533-a37e-68eeb4c5a152" >
+		<diagram name="Default Diagram" id="bfaf6c3f-c7ec-408b-b6c7-b4e9e56f1c6c" confirmed="y" show_relation="columns" >
+			<entity schema="LGL" name="DIM_CALENDAR" color="C1D8EE" x="779" y="570" />
+			<entity schema="LGL" name="DIM_LOCATION" color="C1D8EE" x="76" y="399" />
+			<entity schema="LGL" name="DIM_PAYMENT_TYPE" color="C1D8EE" x="722" y="380" />
+			<entity schema="LGL" name="DIM_RATE_CODE" color="C1D8EE" x="722" y="171" />
+			<entity schema="LGL" name="DIM_TRIP_TYPE" color="C1D8EE" x="95" y="627" />
+			<entity schema="LGL" name="DIM_VENDOR" color="C1D8EE" x="57" y="171" />
+			<entity schema="LGL" name="FACT_TRIP" color="C1D8EE" x="437" y="228" />
+			<callout x="95" y="57" pointer="Round" >
+				<comment><![CDATA[- Create new entities by right-clicking the diagram. 
+- Double-click entity headers to edit.
+- Get a better understanding of the schema by creating multiple diagrams.
+- Convert the logical design to physical design and deploy it into the database.]]></comment>
+			</callout>
+			<script name="SQL_Editor" id="300aa004-5f13-4595-aa89-b86e8c6f6af1" language="SQL" >
+				<string><![CDATA[CREATE SCHEMA LGL;
+
+CREATE  TABLE LGL.DIM_CALENDAR ( 
+	DIM_CALENDAR_ID      BIGINT NOT NULL   ,
+	YEAR_NUMBER          INT    ,
+	QUARTER_NUMBER       INT    ,
+	QUARTER_NAME         VARCHAR    ,
+	MONTH_NUMBER         INT    ,
+	MONTH_NAME           VARCHAR(30)    ,
+	DAY_NUMBER           INT    ,
+	DAY_NAME             VARCHAR(20)    ,
+	WEEK_OF_MONTH        INT    ,
+	WEEK_OF_YEAR         INT    ,
+	WEEKEND              BOOLEAN    ,
+	HOLIDAY              BOOLEAN    ,
+	SEASON               VARCHAR(10)    ,
+	CONSTRAINT PK_DIM_CALENDAR PRIMARY KEY ( DIM_CALENDAR_ID )
+ );
+
+COMMENT ON COLUMN LGL.DIM_CALENDAR.WEEKEND IS '0 is a weekday\n1 is a weekend';
+
+COMMENT ON COLUMN LGL.DIM_CALENDAR.HOLIDAY IS '0 means not a holiday\n1 means there is a holiday';
+
+COMMENT ON COLUMN LGL.DIM_CALENDAR.SEASON IS 'Winter  -->   December 21st \nSpring   --> March 21st \nSummer --> June 21st \nFall   ---> September 21st';
+
+CREATE  TABLE LGL.DIM_LOCATION ( 
+	LOCATION_ID          INT NOT NULL   ,
+	BOROUGH              VARCHAR(100)    ,
+	ZONE_NAME            VARCHAR(100)    ,
+	SERVICE_AREA         VARCHAR(100)    ,
+	CENTROID_LATITUDE    DOUBLE    ,
+	CENTROID_LONGITUDE   DOUBLE    ,
+	CONSTRAINT PK_DIM_LOCATION PRIMARY KEY ( LOCATION_ID )
+ );
+
+CREATE  TABLE LGL.DIM_PAYMENT_TYPE ( 
+	PAYMENT_TYPE_ID      INT NOT NULL   ,
+	PAYMENT_TYPE_NAME    VARCHAR(50)    ,
+	CONSTRAINT PK_DIM_PAYMENT_TYPE PRIMARY KEY ( PAYMENT_TYPE_ID )
+ );
+
+CREATE  TABLE LGL.DIM_RATE_CODE ( 
+	RATE_CODE_ID         INT NOT NULL   ,
+	RATE_CODE_NAME       VARCHAR(50)    ,
+	CONSTRAINT PK_DIM_RATE_CODE PRIMARY KEY ( RATE_CODE_ID )
+ );
+
+CREATE  TABLE LGL.DIM_TRIP_TYPE ( 
+	TRIP_TYPE_ID         INT NOT NULL   ,
+	TRIP_TYPE_NAME       VARCHAR(50)    ,
+	CONSTRAINT PK_DIM_TRIP_TYPE PRIMARY KEY ( TRIP_TYPE_ID )
+ );
+
+CREATE  TABLE LGL.DIM_VENDOR ( 
+	VENDOR_ID            INT NOT NULL   ,
+	VENDOR_NAME          VARCHAR(50)    ,
+	CONSTRAINT PK_DIM_VENDOR PRIMARY KEY ( VENDOR_ID )
+ );
+
+CREATE  TABLE LGL.FACT_TRIP ( 
+	FACT_TRIP_ID         BIGINT NOT NULL   ,
+	PASSENGER_COUNT      INT    ,
+	TRIP_DISTANCE        DECIMAL(5,2)    ,
+	FARE_AMOUNT          DECIMAL(10,2)    ,
+	EXTRA                DECIMAL(10,2)    ,
+	MTA                  DECIMAL(10,2)    ,
+	TIP_AMOUNT           DECIMAL(10,2)    ,
+	TOLLS_AMOUNT         DECIMAL(10,2)    ,
+	IMPROVEMENT_SURCHARGE DECIMAL(10,2)    ,
+	TOTAL_AMOUNT         DECIMAL(10,2)    ,
+	CONGESTION_SURCHARGE DECIMAL(10,2)    ,
+	VENDOR_ID            INT NOT NULL   ,
+	RATE_CODE_ID         INT NOT NULL   ,
+	PAYMENT_TYPE_ID      INT NOT NULL   ,
+	TRIP_TYPE_ID         INT NOT NULL   ,
+	PICKUP_LOCATION_ID   INT NOT NULL   ,
+	DROPOFF_LOCATION_ID  INT NOT NULL   ,
+	PICKUP_DATE_ID       BIGINT NOT NULL   ,
+	DROPOFF_DATE_ID      BIGINT NOT NULL   ,
+	TRIP_DURATION        DECIMAL(12,2)    ,
+	TEMPERATURE          DECIMAL(5,2)    ,
+	PRECIPITATION_PROBABILITY DECIMAL(5,2)    ,
+	RAIN                 DECIMAL(5,2)    ,
+	SHOWERS              DECIMAL(5,2)    ,
+	SNOWFALL             DECIMAL(5,2)    ,
+	SNOW_DEPTH           DECIMAL(5,2)    ,
+	WIND_120M            DECIMAL(5,2)    ,
+	WIND_180M            DECIMAL(5,2)    ,
+	CONSTRAINT PK_FACT_TRIP PRIMARY KEY ( FACT_TRIP_ID )
+ );
+
+COMMENT ON COLUMN LGL.FACT_TRIP.TRIP_DURATION IS 'in minutes';
+
+COMMENT ON COLUMN LGL.FACT_TRIP.TEMPERATURE IS 'Farenheit';
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_VENDOR FOREIGN KEY ( VENDOR_ID ) REFERENCES LGL.DIM_VENDOR( VENDOR_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_RATE_CODE FOREIGN KEY ( RATE_CODE_ID ) REFERENCES LGL.DIM_RATE_CODE( RATE_CODE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_PAYMENT_TYPE FOREIGN KEY ( PAYMENT_TYPE_ID ) REFERENCES LGL.DIM_PAYMENT_TYPE( PAYMENT_TYPE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_TRIP_TYPE FOREIGN KEY ( TRIP_TYPE_ID ) REFERENCES LGL.DIM_TRIP_TYPE( TRIP_TYPE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_LOCATION FOREIGN KEY ( PICKUP_LOCATION_ID ) REFERENCES LGL.DIM_LOCATION( LOCATION_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_LOCATION_0 FOREIGN KEY ( DROPOFF_LOCATION_ID ) REFERENCES LGL.DIM_LOCATION( LOCATION_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_CALENDAR FOREIGN KEY ( PICKUP_DATE_ID ) REFERENCES LGL.DIM_CALENDAR( DIM_CALENDAR_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE LGL.FACT_TRIP ADD CONSTRAINT FK_FACT_TRIP_DIM_CALENDAR_0 FOREIGN KEY ( DROPOFF_DATE_ID ) REFERENCES LGL.DIM_CALENDAR( DIM_CALENDAR_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+]]></string>
+			</script>
+		</diagram>
+	</diagram_group>
+</project>
