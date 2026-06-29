@@ -33,12 +33,5 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 models:
   my_new_project:
-    staging:
-      +materialized: view
-      +schema: staging
-    marts:
+    greentaxi:
       +materialized: table
-      dimensions:
-        +materialized: table
-      facts:
-        +materialized: table
