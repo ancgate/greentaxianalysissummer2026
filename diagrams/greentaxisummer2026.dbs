@@ -139,7 +139,7 @@ Fall   ---> September 21st]]></comment>
 			<entity schema="lgl" name="dim_rate_code" color="C1D8EE" x="722" y="171" />
 			<entity schema="lgl" name="dim_trip_type" color="C1D8EE" x="95" y="627" />
 			<entity schema="lgl" name="dim_vendor" color="C1D8EE" x="57" y="171" />
-			<entity schema="lgl" name="fact_trip" color="C1D8EE" x="399" y="247" />
+			<entity schema="lgl" name="fact_trip" color="C1D8EE" x="437" y="228" />
 			<callout x="95" y="57" pointer="Round" >
 				<comment><![CDATA[- Create new entities by right-clicking the diagram. 
 - Double-click entity headers to edit.
