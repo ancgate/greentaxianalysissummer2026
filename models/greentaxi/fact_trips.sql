@@ -20,7 +20,7 @@ WITH raw_fact_cte AS (
             TO_TIMESTAMP(lpep_pickup_datetime  / 1000 / 1000),
             TO_TIMESTAMP(lpep_dropoff_datetime / 1000 / 1000)
         ) AS trip_duration
-    FROM public.taxi_green_raw
+    FROM GREENTAXI_ELT.GREENTAXI_RAW
 
 ),
 
